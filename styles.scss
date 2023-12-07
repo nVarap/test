@@ -1,0 +1,60 @@
+// Variables
+$primary-color: #3498db;
+
+// Mixins
+@mixin box-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Styles
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+// Header Styles
+header {
+  background-color: $primary-color;
+  color: #fff;
+  padding: 20px;
+}
+
+h1 {
+  margin: 0;
+}
+
+// Button Styles
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: $primary-color;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+
+  // Hover effect
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+
+// Card Styles
+.card {
+  background-color: #fff;
+  margin: 20px;
+  padding: 20px;
+  @include box-shadow;
+
+  // Nested button styling
+  .card-button {
+    @extend .button;
+    margin-top: 10px;
+  }
+}
