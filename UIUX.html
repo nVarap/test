@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jQuery Promises Example</title>
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body {
+      background-color: pink;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      border-width: 3px;
+    }
+    button {
+      cursor: pointer;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Data Table For Dating App</h2>
+
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // Hard-coded data
+    let data = [
+      { id: 1, name: 'John Doe', email: 'john@example.com' },
+      { id: 2, name: 'Jane Doe', email: 'jane@example.com' },
+      { id: 3, name: 'Bob Smith', email: 'bob@example.com' }
+    ];
+
+    // Function to generate table rows
+    function generateTableRows() {
+      const tbody = $('#dataTable tbody');
+      tbody.empty(); // Clear existing rows
+
+    function updateWithID(id, name, email){
+      data.forEach(item => {
+        if(item.id === id){
+          item.name = name;
+          item.email = email;
+        }
+      })
+    }
+
+      data.forEach(item => {
+        const row = `<tr>
+                      <td>${item.id}</td>
+                      <td>${item.name}</td>
+                      <td>${item.email}</td>
+                      <td>
+                        <button class="updateBtn" data-id="${item.id}">Update</button>
+                        <button class="deleteBtn" data-id="${item.id}">Delete</button>
+                      </td>
+                    </tr>`;
+        tbody.append(row);
+      });
+
+      // Attach event handlers for update and delete buttons
+      $('.updateBtn').click(function() {
+        const id = $(this).data('id');
+        // Implement update logic here (e.g., open a modal for editing)
+        console.log(`Update row with ID ${id}`);
+        let n_name = prompt("Input new name (enter for nothing): ");
+        let new_name = n_name !== null && n_name.trim() !== '' ? n_name : data[id].name;
+
+        let n_email = prompt("Input new email (enter for nothing): ");
+        let new_email = n_email !== null && n_email.trim() !== '' ? n_email : data[id].email;
+
+        console.log(`name: ${new_name}, emailL ${new_email}`);
+        updateWithID(id, new_name, new_email);
+        generateTableRows();
+      });
+
+      $('.deleteBtn').click(function() {
+        const id = $(this).data('id');
+        // Implement delete logic here
+        const rowIndex = data.findIndex(item => item.id === id);
+        if (rowIndex !== -1) {
+          // Use fadeOut animation before removing the row
+          $(`#dataTable tbody tr:eq(${rowIndex})`).fadeOut(500, function() {
+            data.splice(rowIndex, 1);
+            generateTableRows(); // Update the table after deletion
+            console.log(`Delete row with ID ${id}`);
+          });
+        }
+      });
+    }
+
+    // Using promises to ensure data is loaded before generating table rows
+    const loadData = new Promise((resolve) => {
+      // Simulate an asynchronous operation (e.g., fetching data from an API)
+      setTimeout(() => {
+        resolve(data);
+      }, 1000);
+    });
+
+    // When data is loaded, generate table rows
+    loadData.then(() => {
+      generateTableRows();
+    });
+  </script>
+
+</body>
+</html>
